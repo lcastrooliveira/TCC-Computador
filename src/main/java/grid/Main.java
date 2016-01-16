@@ -55,7 +55,7 @@ public class Main {
 			constroiGrafo();
 			AlgBusca algoritmo = executarAlgoritmo(algoritmoSelecionado);
 		    construirCoordenadas(algoritmo);
-		    //mandarCoordenadas();
+		    enviarCoordenadas();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,30 +91,31 @@ public class Main {
 	    }
 	    System.out.println("Caminho Encontrado");
 	    for(int i = 0; i < caminhoArray.length; i++) {
-	    	System.out.println(caminhoArray[i]);
+	    	if(caminhoArray[i] == -1) break;
+	    	System.out.print(caminhoArray[i]+" ");
 	    }
 	    coordenadas = new byte[caminhoArray.length];
+	    System.out.println();
+	    System.out.println("Em coordenadas:");
 	    for(int i = 0; i < caminhoArray.length -1; i++) {
 	    	int de = caminhoArray[i];
 	    	int para = caminhoArray[i+1];
 	    	if(para == -1) break;
 	    	if(para == de -1) {
-	    		System.out.println("Oeste");
+	    		System.out.print("O ");
 	    		coordenadas[i] = OESTE;
 	    	} else if(para == de + 1) {
-	    		System.out.println("Leste");
+	    		System.out.print("L ");
 	    		coordenadas[i] = LESTE;
 	    	} else if(para == de + coluna) {
-	    		System.out.println("Norte");
+	    		System.out.print("N ");
 	    		coordenadas[i] = NORTE;
 	    	} else if(para == de - coluna) {
-	    		System.out.println("Sul");
+	    		System.out.print("S ");
 	    		coordenadas[i] = SUL;
 	    	}
 	    }
-	    for(int i = 0; i < coordenadas.length; i++) {
-	    	System.out.println(coordenadas[i]);
-	    }
+	    System.out.println();
 	}
 
 	public static void start() {
@@ -148,7 +149,7 @@ public class Main {
 		constroiGrafo();
 		AlgBusca algoritimo = executarAlgoritmo("B");
 		construirCoordenadas(algoritimo);
-		mandarCoordenadas();
+		enviarCoordenadas();
 	}
 	
 	public static void constroiGrid(int curva, String mapeamento) {
@@ -206,8 +207,6 @@ public class Main {
 	}
 	
 	public static int to1D(int i, int j) {
-		//System.out.println(i+" "+j);
-		//System.out.println("1d: "+(i*linha+j));
 		return i*coluna+j;
 	}
 	
@@ -243,9 +242,10 @@ public class Main {
 		}
 	}
 
-	public static void mandarCoordenadas() {
+	public static void enviarCoordenadas() {
 		System.out.println("Mandando Coordenadas de Volta:");
 		try {
+			for(byte b : coordenadas) System.out.print(b+" ");
             serialPort.writeBytes(coordenadas);//Write data to port
             serialPort.closePort();//Close serial port
         }
@@ -268,6 +268,7 @@ public class Main {
 					buffer.append(serialPort.readString());
 					if(buffer.toString().endsWith("x")) {
 						try {
+							System.out.println("Dados da Grid Recebidos :)");
 							processarMensagem(buffer.toString());
 						} catch (Exception e) {
 							e.printStackTrace();
