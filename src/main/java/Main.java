@@ -1,4 +1,4 @@
-package grid;
+
 
 import grafo.Grafo;
 
@@ -15,7 +15,7 @@ import algoritmos.BuscaEmProfundidade;
 import algoritmos.Dijkstra;
 
 public class Main {
-
+	
 	static final int NORTE = 13;
 	static final int OESTE = 37;
 	static final int LESTE = 59;
@@ -32,8 +32,8 @@ public class Main {
 	static BuscaEmLargura bfs;
 	static Dijkstra djk;
 	
+	static String algoritmoSelecionado;
 	static byte[] coordenadas;
-	
 	static BufferedReader in = new BufferedReader (
             new InputStreamReader (System.in));
 	
@@ -45,17 +45,17 @@ public class Main {
 			System.out.println("B - Busca em Largura");
 			System.out.println("K - Dijkstra");
 			System.out.print("R: ");
-			String algoritmoSelecionado = in.readLine();
+			algoritmoSelecionado = in.readLine();
 			System.out.println(algoritmoSelecionado);
 			System.out.println("Esperando Mapa da Grid.....");
 			//processarMensagem("BBBBBPPBBBBBPBPBBBBB4x");
-			//start();
-			constroiGrid(4, "BBBBBPPBBBBBPBPBBBBB");
-			imprimeGrid();
-			constroiGrafo();
-			AlgBusca algoritmo = executarAlgoritmo(algoritmoSelecionado);
-		    construirCoordenadas(algoritmo);
-		    enviarCoordenadas();
+			start();
+			//constroiGrid(4, "BBBBBPPBBBBBPBPBBBBB");
+			//imprimeGrid();
+			//constroiGrafo();
+			//AlgBusca algoritmo = executarAlgoritmo(algoritmoSelecionado);
+		    //construirCoordenadas(algoritmo);
+		    //enviarCoordenadas();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,6 +116,7 @@ public class Main {
 	    	}
 	    }
 	    System.out.println();
+	    
 	}
 
 	public static void start() {
@@ -147,7 +148,7 @@ public class Main {
 		constroiGrid(coluna, mapeamento);
 		imprimeGrid();
 		constroiGrafo();
-		AlgBusca algoritimo = executarAlgoritmo("B");
+		AlgBusca algoritimo = executarAlgoritmo(algoritmoSelecionado);
 		construirCoordenadas(algoritimo);
 		enviarCoordenadas();
 	}
