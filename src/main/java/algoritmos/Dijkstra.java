@@ -1,5 +1,9 @@
 package algoritmos;
-
+/**
+ * @author Ziviani
+ * Retirado de:
+ * http://www2.dcc.ufmg.br/livros/algoritmos-java/implementacoes.php
+ */
 import estruturasAuxiliares.FPHeapMinIndireto;
 import grafo.Grafo;
 

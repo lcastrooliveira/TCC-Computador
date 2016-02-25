@@ -1,4 +1,11 @@
 package estruturasAuxiliares;
+
+/**
+ * @author Ziviani
+ * Retirado de:
+ * http://www2.dcc.ufmg.br/livros/algoritmos-java/implementacoes.php
+ */
+
 public class Fila {
   private static class Celula {
     Object item;

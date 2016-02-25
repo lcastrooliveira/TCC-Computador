@@ -1,5 +1,4 @@
 
-
 import grafo.Grafo;
 
 import java.io.BufferedReader;
@@ -13,31 +12,70 @@ import algoritmos.AlgBusca;
 import algoritmos.BuscaEmLargura;
 import algoritmos.BuscaEmProfundidade;
 import algoritmos.Dijkstra;
-
+/**
+ * 
+ * @author Lucas
+ * @version 1.0
+ * Ultima atualizacao em: 25/02/2016
+ */
 public class Main {
 	
+	/**
+	 * Codigo das direcoes, que foi mantido igual ao
+	 * que foi programado no robo
+	 */
 	static final int NORTE = 13;
 	static final int OESTE = 37;
 	static final int LESTE = 59;
 	static final int SUL = 29;
 
+	/**
+	 * Porta que vai receber os dados via serial
+	 * O resultado sera armazenado numa StringBuffer
+	 * e convertido para uma String mais tarde
+	 */
 	static SerialPort serialPort;
 	static StringBuffer buffer;
 	
+	/**
+	 * grid - representa a matriz auxiliar que abstrai
+	 * o cenario. Linha, coluna representam as dimensoes da matriz
+	 * que sera contruida em grid, uma vez que os dados sejam
+	 * recebidos do robo. Grafo vai armazenar as conexoes de cada
+	 * quadrado do cenario com os seus vizinhos.
+	 */
 	static char[][] grid;
 	static int linha,coluna;
 	static Grafo grafo;
 	
+	/**
+	 * Armazena uma referencia para cada algoritimo de busca
+	 */
 	static BuscaEmProfundidade dfs;
 	static BuscaEmLargura bfs;
 	static Dijkstra djk;
 	
+	/**
+	 * Input do usuario que informa qual o algoritmo deseja 
+	 * escolher
+	 */
 	static String algoritmoSelecionado;
+	
+	/**
+	 * Vetor de coordenadas que sera mandado de volta ao robo
+	 */
 	static byte[] coordenadas;
+	
+	/**
+	 * Ler do teclado
+	 */
 	static BufferedReader in = new BufferedReader (
             new InputStreamReader (System.in));
 	
-	
+	/**
+	 * Metodo main, aqui e onde o programa se inicia
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			System.out.println("Digite uma letra para especificar qual algoritmo deseja utilizar:");
@@ -48,14 +86,7 @@ public class Main {
 			algoritmoSelecionado = in.readLine();
 			System.out.println(algoritmoSelecionado);
 			System.out.println("Esperando Mapa da Grid.....");
-			//processarMensagem("BBBBBPPBBBBBPBPBBBBB4x");
 			start();
-			//constroiGrid(4, "BBBBBPPBBBBBPBPBBBBB");
-			//imprimeGrid();
-			//constroiGrafo();
-			//AlgBusca algoritmo = executarAlgoritmo(algoritmoSelecionado);
-		    //construirCoordenadas(algoritmo);
-		    //enviarCoordenadas();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -119,6 +150,11 @@ public class Main {
 	    
 	}
 
+	/**
+	 * Abre a porta serial e fica esperando os dados chegarem do robo
+	 * A comunicacao com a porta serial e orientada a eventos, representado pelo
+	 * SerialPortReader()
+	 */
 	public static void start() {
 		buffer = new StringBuffer();
 		serialPort = new SerialPort("COM6"); 
@@ -134,11 +170,17 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Metodo descobre as dimensoes da matriz, logo em seguida constroi a grid,
+	 * o grafo e executa o algoritmo. Depois que o a saida do algoritmo preenche o
+	 * vetor de coordenadas, envia de volta ao robo via conexao serial abstradia pelo zig bee
+	 * @param mensagem
+	 * @throws Exception
+	 */
 	public static void processarMensagem(String mensagem) throws Exception {
 		System.out.println("Curva:");
 		String mapeamento = mensagem.substring(0,mensagem.length()-2);
 		coluna = (short)mensagem.charAt(mensagem.length()-2);
-		//coluna = 4;
 		linha = mapeamento.length() / coluna;
 		System.out.println(coluna);
 		System.out.println("String Recebida:");
@@ -255,17 +297,24 @@ public class Main {
         }
 	}
 
-	/*
+	/**
 	 * In this class must implement the method serialEvent, through it we learn about 
 	 * events that happened to our port. But we will not report on all events but only 
 	 * those that we put in the mask. In this case the arrival of the data and change the 
 	 * status lines CTS and DSR
+	 * 
+	 * Modificado de: http://java-simple-serial-connector.googlecode.com/svn-history/r6/wiki/jSSC_examples.wiki
 	 */
 	static class SerialPortReader implements SerialPortEventListener {
 		
 		public void serialEvent(SerialPortEvent event) {
 			if(event.isRXCHAR()){//If data is available
 				try {
+					/**
+					 * Vai concatenando qualquer dado que receber no string buffer
+					 * quando receber o caracter 'x' significa que acabou a mensagem, chamando
+					 * o metodo processarMensagem()
+					 */
 					buffer.append(serialPort.readString());
 					if(buffer.toString().endsWith("x")) {
 						try {

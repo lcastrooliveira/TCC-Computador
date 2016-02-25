@@ -2,7 +2,12 @@ package grafo;
 
 import estruturasAuxiliares.Lista;
 
-/*-- vide Programa@{\it ~\ref{Fig2.1.5}@ --*/
+/**
+ * @author Ziviani
+ * Retirado de:
+ * http://www2.dcc.ufmg.br/livros/algoritmos-java/implementacoes.php
+ */
+
 public class Grafo {
   public static class Aresta {
     private int v1, v2, peso;
